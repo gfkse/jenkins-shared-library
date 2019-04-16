@@ -1,2 +1,53 @@
 = Declarative Pipeline - Jenkins shared library
-Declarative Pipeline - Jenkins shared library
+
+____
+One has to note the difference between **Declarative** footnote:declarative[https://jenkins.io/doc/book/pipeline/syntax/#declarative-pipeline]
+and **Scripted** footnote:scripted[https://jenkins.io/doc/book/pipeline/syntax/#scripted-pipeline] pipelines, mainly it
+can be summed up to:
+
+* **declarative p.** -> must be enclosed within a `pipeline {}` block footnote:jenkins-secrets[https://dev.to/pencillr/jenkins-pipelines-and-their-dirty-secrets-1]
+* **scripted p.** -> always are enclosed within a `node {}` block
+____
+
+== Use case
+We chose the declarative footnote:declarative[] approach because this one suited our scenario better. We
+had to deploy `Jenkinsfile` in +10 repositories and there was alot of duplicate code, not to mention
+that when our DevOps where fixing some of the `Jenkinsfile`, they had to update all the repos.
+
+Therefore, we started from `ChrisCooney/jenkins-global-library-simple` footnote:sample1[https://github.com/ChrisCooney/jenkins-global-library-simple]
+pushed alot of failing builds to understand how everything works, and when we eventually reached our first
+working build, we started refactoring everything and splitting the repeating bits into separate reusable
+components.
+
+=== Prerequisites
+
+* **secrets** footnote:secrets[https://www.liatrio.com/blog/using-serverless-secrets-in-jenkinsfile-pipelines]
+  must be configured in Jenkins prior to deploy these to your instance
+* configure Jenkins shared-library repository in Jenkins Admin footnote:libconfig[https://medium.com/@lvthillo/send-slack-notifications-in-jenkins-pipelines-using-a-shared-library-873ca876f72c]
+* `Jenkinsfile` will be deployed in each repository (**must** be in project root dir)
+* shared library must be imported and the pipeline function must be called
+
+.Jenkinsfile
+[source,groovy]
+----
+@Library('name-of-library-configured-in-jenkins-admin') _
+evenOrOdd(currentBuild.getNumber())
+----
+
+=== How it's structured
+
+IMPORTANT: **declarative** footnote:declarative[] pipeline scripts (written in Groovy) **must** be placed
+in the project's `./vars/` directory in order to be picked up by Jenkins
+
+[source,bash]
+----
+|-src
+|---com
+|-----gfk
+|-------jenkins
+|---------components/     <-- classes (mainly what you put in Jenkinsfile script {} blocks)
+|-vars/                   <-- declarative pipelines (*.groovy scripts)
+----
+
+Basically, there's a unified repository that contains our shared-library stuff and all other repositories
+just import this library and call the pipeline function name (in our case it's the file name - CamelCased).
