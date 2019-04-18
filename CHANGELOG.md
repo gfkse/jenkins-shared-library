@@ -27,7 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Security
 - WIP
 
-[Unreleased]: https://github.com/olivierlacan/keep-a-changelog/compare/v0.0.1...HEAD
+[Unreleased]: https://github.com/gfkse/jenkins-shared-library/compare/v0.0.1...HEAD
 <!-- this is how we do'it for the next versions
 [0.0.2]: https://github.com/gfkse/jenkins-shared-library/compare/v0.0.1...v0.0.2
 -->
