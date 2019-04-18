@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - README that details the project and how to use it (written in [AsciiDoc](https://asciidoctor.org/docs/asciidoc-writers-guide/))
 - `Jenkinsfile` for the project - just for testing shared library functions
 - sample declarative pipeline that's testing odd/even build numbers
+- components that offer some functionality such as _login on AWS, build branch regex pattern_ et. al.
+- declarative pipelines that use the components
 
 ### Changed
 - WIP
